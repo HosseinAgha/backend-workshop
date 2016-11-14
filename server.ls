@@ -3,29 +3,27 @@
 # bodyParser = require('body-parser')
 require! {
   'express'
+  'http'
+  'socket.io': socketServer
   'cors'
   'body-parser': bp
 }
 
 app = express!
+httpServer = http.Server(app)
+io = socketServer(httpServer)
 
 module.exports = (port) ->
-  # express middlewares
-  app.use(cors!)
+  io.on "connection", (socket) ->
 
-  app.get '/api', (req, res) ->
-    func = req.query.fn
-    # realFunc = require("./apiFunctions/" + func + ".js")
-    realFunc = require("./apiFunctions/#{func}.js")
+    socket.on "sayHello", (data, response) ->
+      console.info "a user said hello", socket.handshake.headers.origin
 
-    realFunc(req.body.params)
-    .then (result) ->
-      res.end JSON.stringify(result)
-    .catch (err) ->
-      console.error("Interanl Server Error...", err)
+    socket.on "disconnect", ->
+      console.info "a user disconnected"
 
-  app.listen port, ->
-    console.log("listening on port: #{port}")
+  httpServer.listen port, -> 
+    console.log "listening on port: #{port}"
 
 
 

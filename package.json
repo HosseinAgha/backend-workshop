@@ -13,6 +13,7 @@
     "body-parser": "^1.15.2",
     "cors": "^2.8.1",
     "express": "^4.14.0",
+    "socket.io": "^1.5.1",
     "telegram-bot-node": "^0.2.6",
     "when": "^3.7.7"
   },
